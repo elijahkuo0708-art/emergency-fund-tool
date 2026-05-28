@@ -72,6 +72,7 @@ body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;ba
         <p>急難發生前，案家的工作、家庭、經濟與生活狀況</p>
       </div>
     </div>
+    <div class="qa-row"><div class="qa-q">案主婚姻狀況？</div><div class="qa-a"><select id="q1-marital"><option value="">請選擇</option><option value="已婚">已婚</option><option value="未婚">未婚</option><option value="離婚">離婚</option><option value="喪偶">喪偶</option><option value="分居">分居</option></select></div></div>
     <div class="qa-row"><div class="qa-q">案主目前的工作是？</div><div class="qa-a"><input type="text" id="q1-job" placeholder="例：板模工、送貨員、家管、無業"></div></div>
     <div class="qa-row"><div class="qa-q">案主每月收入約多少？</div><div class="qa-a"><input type="text" id="q1-income" placeholder="例：約35,000元／月，或收入不穩定"></div></div>
     <div class="qa-row"><div class="qa-q">同住家庭成員有哪些？</div><div class="qa-a"><input type="text" id="q1-family" placeholder="例：案妻、兩名就讀國小的子女"></div></div>
@@ -175,7 +176,7 @@ async function generate(){
   document.getElementById('output-wrap').style.display = 'block';
   document.getElementById('output-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-  const P1 = '根據以下資訊，撰寫急難救助金申請表「（一）案家原本情況」欄位。\n\n格式：以「一、二、……」分點條列，每點一段，共2至3點。須涵蓋：案主工作與收入、家庭成員組成與各自狀況、居住狀況與支持系統。\n\n【案主工作】：' + (v('q1-job')||'（未填）') + '\n【案主月收入（急難前）】：' + (v('q1-income')||'（未填）') + '\n【同住成員】：' + (v('q1-family')||'（未填）') + '\n【家人工作就學狀況】：' + (v('q1-family-status')||'（未填）') + '\n【居住狀況】：' + (v('q1-housing')||'（未填）') + '\n【支持系統】：' + (v('q1-support')||'（未填）') + '\n【其他補充】：' + (v('q1-extra')||'無');
+  const P1 = '根據以下資訊，撰寫急難救助金申請表「（一）案家原本情況」欄位。\n\n格式：以「一、二、……」分點條列，每點一段，共2至3點。須涵蓋：案主工作與收入、家庭成員組成與各自狀況、居住狀況與支持系統。\n\n【案主婚姻狀況】：' + (v('q1-marital')||'（未填）') + '\n【案主工作】：' + (v('q1-job')||'（未填）') + '\n【案主月收入（急難前）】：' + (v('q1-income')||'（未填）') + '\n【同住成員】：' + (v('q1-family')||'（未填）') + '\n【家人工作就學狀況】：' + (v('q1-family-status')||'（未填）') + '\n【居住狀況】：' + (v('q1-housing')||'（未填）') + '\n【支持系統】：' + (v('q1-support')||'（未填）') + '\n【其他補充】：' + (v('q1-extra')||'無');
 
   const P2 = '根據以下資訊，撰寫急難救助金申請表「（二）發生什麼急難事件」欄位。\n\n格式（請嚴格遵守，直接從「一、」開始輸出）：\n一、急難事件：\n（詳述事件時間、地點、經過、傷況）\n\n二、急難發生後的處理方式：\n（描述事後處理、已申請資源、目前狀態，說明為何仍有急難金需求）\n\n【事件時間】：' + (v('q2-date')||'（未填）') + '\n【事件地點】：' + (v('q2-place')||'（未填）') + '\n【事件經過】：' + (v('q2-event')||'（未填）') + '\n【事後處理】：' + (v('q2-action')||'（未填）');
 
