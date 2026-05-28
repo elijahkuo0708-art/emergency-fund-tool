@@ -304,15 +304,8 @@
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
     <span>所有資料僅在您的瀏覽器本機處理，<strong>不儲存、不上傳</strong>至任何伺服器。關閉視窗後資料即消失，符合個資保護原則。</span>
   </div>
-
-  <!-- API Key -->
-  <div class="api-card">
-    <div class="api-label">
-      <span class="dot" id="key-dot"></span>
-      Anthropic API Key
-    </div>
     <div class="api-input-row">
-      <input type="password" id="api-key" placeholder="sk-ant-api03-..." oninput="checkKey()">
+      <input type="password" id="api-key" placeholder="sk-ant-api03-...">
     </div>
     <div class="api-hint">Key 僅存於瀏覽器記憶體，不會被儲存或傳送至任何後端。取得方式：console.anthropic.com → API Keys → Create Key</div>
   </div>
@@ -414,7 +407,7 @@
     </div>
   </div>
 
-  <button class="gen-btn" id="gen-btn" onclick="generate()" disabled>
+  <button class="gen-btn" id="gen-btn" onclick="generate()">
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
     自動產製三段申請描述
   </button>
@@ -456,30 +449,17 @@
 </div>
 
 <script>
-function checkKey(){
-  const k = document.getElementById('api-key').value.trim();
-  const dot = document.getElementById('key-dot');
-  const btn = document.getElementById('gen-btn');
-  if(k.startsWith('sk-ant-') || k.startsWith('sk-')){
-    dot.className = 'dot ok'; btn.disabled = false;
-  } else if(k.length > 0){
-    dot.className = 'dot err'; btn.disabled = true;
-  } else {
-    dot.className = 'dot'; btn.disabled = true;
-  }
 }
 
 function v(id){ return document.getElementById(id).value.trim(); }
 
-async function callAPI(key, sys, user, outId){
+async function callAPI(sys, user, outId){
   const el = document.getElementById(outId);
   el.innerHTML = '<span class="out-loading"><span class="spinner-dark"></span>產製中...</span>';
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+  const resp = await fetch('https://polished-frost-ae7banthropic-proxy.elijahkuo0708.workers.dev/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': key,
-      'anthropic-version': '2023-06-01'
     },
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
@@ -519,8 +499,6 @@ async function callAPI(key, sys, user, outId){
 }
 
 async function generate(){
-  const key = v('api-key');
-  if(!key) return;
   const btn = document.getElementById('gen-btn');
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> 產製中，請稍候...';
@@ -578,17 +556,16 @@ async function generate(){
 【教會協助】：${v('q3-church') || '（無）'}`;
 
   try {
-    await callAPI(key, SYS, P1, 'out-1');
-    await callAPI(key, SYS, P2, 'out-2');
-    await callAPI(key, SYS, P3, 'out-3');
+    await callAPI(SYS, P1, 'out-1');
+    await callAPI(SYS, P2, 'out-2');
+    await callAPI(SYS, P3, 'out-3');
   } catch(e) {
     document.getElementById('out-1').textContent = '連線錯誤：' + e.message;
   }
 
   btn.disabled = false;
   btn.innerHTML = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg> 重新產製`;
-  checkKey();
-}
+  }
 
 function copyBlock(id){
   const text = document.getElementById(id).textContent;
