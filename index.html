@@ -104,6 +104,7 @@ body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;ba
         <p>目前生活困境，以及接下來的具體打算</p>
       </div>
     </div>
+    <div class="qa-row"><div class="qa-q">案主目前身體狀況？</div><div class="qa-a"><input type="text" id="q3-condition" placeholder="例：仍臥床休養、術後恢復普通需定期回診、無法行走、化療中體力虛弱"></div></div>
     <div class="qa-row"><div class="qa-q">案主現在還有收入嗎？</div><div class="qa-a"><input type="text" id="q3-income" placeholder="例：目前完全無收入 ／ 僅剩案妻兼職約8,000元"></div></div>
     <div class="qa-row"><div class="qa-q">預計多久無法正常工作？</div><div class="qa-a"><input type="text" id="q3-duration" placeholder="例：約3至4個月、化療期間（約半年）"></div></div>
     <div class="qa-row"><div class="qa-q">目前最迫切的需求是？</div><div class="qa-a"><input type="text" id="q3-need" placeholder="例：房租、生活費、醫療費用、子女學費"></div></div>
@@ -172,6 +173,7 @@ async function generate(){
 '事件地點：' + (v('q2-place')||'（未填）') + '\n' +
 '事件經過：' + (v('q2-event')||'（未填）') + '\n' +
 '事後處理：' + (v('q2-action')||'（未填）') + '\n' +
+'案主目前身體狀況：' + (v('q3-condition')||'（未填）') + '\n' +
 '急難後收入：' + (v('q3-income')||'（未填）') + '\n' +
 '預計無法工作期間：' + (v('q3-duration')||'（未填）') + '\n' +
 '迫切需求：' + (v('q3-need')||'（未填）') + '\n' +
