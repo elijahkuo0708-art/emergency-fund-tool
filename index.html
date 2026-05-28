@@ -142,52 +142,76 @@ body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;ba
 
 <script>
 const PROXY = 'https://polished-frost-ae7banthropic-proxy.elijahkuo0708.workers.dev/';
-const SYS = '你是基督教救助協會（1919）的資深社工督導，專門撰寫急難救助金申請表的案家問題描述欄位。文字風格：專業、客觀、具體，符合台灣社工書寫規範。稱謂一律用「案主」、「案妻」、「案子」、「案女」等社工慣用語，不使用真實姓名。措辭有說服力但不誇大失真。請直接輸出內文，不要加任何前言、解釋或欄位標題。';
+const SYS = '你是基督教救助協會（1919）的資深社工督導，專門撰寫急難救助金申請表的案家問題描述欄位。文字風格：專業、客觀、具體，符合台灣社工書寫規範。稱謂依婚姻狀況使用正確慣用語：已婚用「案妻」、喪偶用「已故案妻／案夫」、離婚則不提前配偶協助、未婚則無配偶。子女依性別用「案子」或「案女」。不使用真實姓名。三段描述須前後邏輯一致，家庭結構、人際關係、收入狀況不可相互矛盾。請直接輸出內文，不要加任何前言、解釋或欄位標題。';
 
 function v(id){ return document.getElementById(id).value.trim(); }
-
-async function callAPI(user, outId){
-  const el = document.getElementById(outId);
-  el.innerHTML = '<span class="out-loading"><span class="spinner-dark"></span>產製中...</span>';
-  const resp = await fetch(PROXY, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-5',
-      max_tokens: 800,
-      stream: false,
-      system: SYS,
-      messages: [{ role: 'user', content: user }]
-    })
-  });
-  if(!resp.ok){
-    const e = await resp.json();
-    el.textContent = '錯誤：' + (e.error ? e.error.message : resp.statusText);
-    return;
-  }
-  const data = await resp.json();
-  el.textContent = data.content[0].text;
-}
 
 async function generate(){
   const btn = document.getElementById('gen-btn');
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> 產製中，請稍候...';
   document.getElementById('output-wrap').style.display = 'block';
+
+  document.getElementById('out-1').innerHTML = '<span class="out-loading"><span class="spinner-dark"></span>產製中...</span>';
+  document.getElementById('out-2').innerHTML = '<span class="out-loading"><span class="spinner-dark"></span>產製中...</span>';
+  document.getElementById('out-3').innerHTML = '<span class="out-loading"><span class="spinner-dark"></span>產製中...</span>';
   document.getElementById('output-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-  const P1 = '根據以下資訊，撰寫急難救助金申請表「（一）案家原本情況」欄位。\n\n格式：以「一、二、……」分點條列，每點一段，共2至3點。須涵蓋：案主工作與收入、家庭成員組成與各自狀況、居住狀況與支持系統。\n\n【案主婚姻狀況】：' + (v('q1-marital')||'（未填）') + '\n【案主工作】：' + (v('q1-job')||'（未填）') + '\n【案主月收入（急難前）】：' + (v('q1-income')||'（未填）') + '\n【同住成員】：' + (v('q1-family')||'（未填）') + '\n【家人工作就學狀況】：' + (v('q1-family-status')||'（未填）') + '\n【居住狀況】：' + (v('q1-housing')||'（未填）') + '\n【支持系統】：' + (v('q1-support')||'（未填）') + '\n【其他補充】：' + (v('q1-extra')||'無');
-
-  const P2 = '根據以下資訊，撰寫急難救助金申請表「（二）發生什麼急難事件」欄位。\n\n格式（請嚴格遵守，直接從「一、」開始輸出）：\n一、急難事件：\n（詳述事件時間、地點、經過、傷況）\n\n二、急難發生後的處理方式：\n（描述事後處理、已申請資源、目前狀態，說明為何仍有急難金需求）\n\n【事件時間】：' + (v('q2-date')||'（未填）') + '\n【事件地點】：' + (v('q2-place')||'（未填）') + '\n【事件經過】：' + (v('q2-event')||'（未填）') + '\n【事後處理】：' + (v('q2-action')||'（未填）');
-
-  const P3 = '根據以下資訊，撰寫急難救助金申請表「（三）案家現況與未來計畫」欄位。\n\n格式（請嚴格遵守，直接從「一、」開始輸出）：\n一、案家現況：\n（描述目前收入中斷、生活困境、迫切需求，說明申請急難金之必要性）\n\n二、未來計畫：\n（一）（具體規劃，如就業、復健）\n（二）（具體規劃，如教會協助、還款安排）\n\n【急難後收入】：' + (v('q3-income')||'（未填）') + '\n【預計無法工作期間】：' + (v('q3-duration')||'（未填）') + '\n【迫切需求】：' + (v('q3-need')||'（未填）') + '\n【未來計畫】：' + (v('q3-future')||'（未填）') + '\n【教會協助】：' + (v('q3-church')||'（無）');
+  const prompt =
+'請根據以下案家資訊，一次產出急難救助金申請表的三個描述欄位，所有欄位須共用同一套家庭背景，前後邏輯完全一致。\n\n' +
+'【案家基本資訊】\n' +
+'婚姻狀況：' + (v('q1-marital')||'（未填）') + '\n' +
+'工作：' + (v('q1-job')||'（未填）') + '\n' +
+'急難前月收入：' + (v('q1-income')||'（未填）') + '\n' +
+'同住成員：' + (v('q1-family')||'（未填）') + '\n' +
+'家人工作就學狀況：' + (v('q1-family-status')||'（未填）') + '\n' +
+'居住狀況：' + (v('q1-housing')||'（未填）') + '\n' +
+'支持系統：' + (v('q1-support')||'（未填）') + '\n' +
+'其他背景：' + (v('q1-extra')||'無') + '\n' +
+'事件時間：' + (v('q2-date')||'（未填）') + '\n' +
+'事件地點：' + (v('q2-place')||'（未填）') + '\n' +
+'事件經過：' + (v('q2-event')||'（未填）') + '\n' +
+'事後處理：' + (v('q2-action')||'（未填）') + '\n' +
+'急難後收入：' + (v('q3-income')||'（未填）') + '\n' +
+'預計無法工作期間：' + (v('q3-duration')||'（未填）') + '\n' +
+'迫切需求：' + (v('q3-need')||'（未填）') + '\n' +
+'未來計畫：' + (v('q3-future')||'（未填）') + '\n' +
+'教會協助：' + (v('q3-church')||'無') + '\n\n' +
+'請依序輸出以下三個欄位，每個欄位之間以「---」分隔，不要加欄位標題：\n\n' +
+'第一欄：案家原本情況\n以「一、二、……」分點條列，共2至3點，涵蓋案主工作收入、家庭成員組成、居住與支持狀況。\n\n' +
+'第二欄：急難事件與處理\n嚴格按照以下格式：\n一、急難事件：\n（詳述時間、地點、經過、傷況）\n二、急難發生後的處理方式：\n（事後處理、已申請資源、目前狀態，說明為何仍有急難金需求）\n\n' +
+'第三欄：案家現況與未來計畫\n嚴格按照以下格式：\n一、案家現況：\n（目前收入中斷、生活困境、迫切需求）\n二、未來計畫：\n（一）（具體規劃）\n（二）（具體規劃）';
 
   try {
-    await callAPI(P1, 'out-1');
-    await callAPI(P2, 'out-2');
-    await callAPI(P3, 'out-3');
+    const resp = await fetch(PROXY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-5',
+        max_tokens: 2400,
+        stream: false,
+        system: SYS,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    if(!resp.ok){
+      const e = await resp.json();
+      const msg = '錯誤：' + (e.error ? e.error.message : resp.statusText);
+      document.getElementById('out-1').textContent = msg;
+      document.getElementById('out-2').textContent = '';
+      document.getElementById('out-3').textContent = '';
+    } else {
+      const data = await resp.json();
+      const full = data.content[0].text;
+      const parts = full.split('---');
+      document.getElementById('out-1').textContent = (parts[0]||'').trim();
+      document.getElementById('out-2').textContent = (parts[1]||'').trim();
+      document.getElementById('out-3').textContent = (parts[2]||'').trim();
+    }
   } catch(e) {
     document.getElementById('out-1').textContent = '連線錯誤：' + e.message;
+    document.getElementById('out-2').textContent = '';
+    document.getElementById('out-3').textContent = '';
   }
 
   btn.disabled = false;
