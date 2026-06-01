@@ -93,7 +93,7 @@ body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;ba
     <div class="qa-row"><div class="qa-q">事件發生的時間？</div><div class="qa-a"><input type="text" id="q2-date" placeholder="例：114年5月10日、今年三月初"></div></div>
     <div class="qa-row"><div class="qa-q">事件發生的地點？</div><div class="qa-a"><input type="text" id="q2-place" placeholder="例：工地現場、住家、醫院"></div></div>
     <div class="qa-row"><div class="qa-q">發生了什麼事？</div><div class="qa-a"><textarea id="q2-event" placeholder="例：案主搬運鋼筋時被機具壓傷，切斷左手小拇指，造成手掌骨折，緊急送醫手術。"></textarea></div></div>
-    <div class="qa-row"><div class="qa-q">事後如何處理？已申請哪些資源？</div><div class="qa-a"><textarea id="q2-action" placeholder="例：手術順利完成，但需定期回診復健，手部功能暫時喪失，無法工作。已申請職業災害保險，但尚未核發。"></textarea></div></div>
+    <div class="qa-row"><div class="qa-q">事後如何處理？已申請哪些資源？</div><div class="qa-a"><textarea id="q2-action" placeholder="例：手術順利，需休養3個月，尚未申請任何資源 ／ 已申請職災保險但尚未核發 ／ 未申請任何補助"></textarea></div></div>
   </div>
 
   <div class="card">
@@ -143,7 +143,7 @@ body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;ba
 
 <script>
 const PROXY = 'https://polished-frost-ae7banthropic-proxy.elijahkuo0708.workers.dev/';
-const SYS = '你是基督教救助協會（1919）資深社工督導，撰寫急難救助金申請表案家問題描述。寫作規則：1.每個事實只說一次，不重複；2.不用連接詞堆疊（然而、亦、且、並）；3.只寫具體事實，不寫「陷入困境」「壓力龐大」等空泛描述；4.未來計畫只寫實際行動，不寫「建立支持網絡」「增強韌性」等抽象語句；5.每段150字以內；6.稱謂依婚姻：已婚用案妻、喪偶用已故案妻或案夫、離婚不提前配偶、未婚無配偶；子女用案子或案女；7.三段前後邏輯一致不可矛盾；8.直接輸出內文不加標題或前言。';
+const SYS = '你是基督教救助協會（1919）資深社工督導，撰寫急難救助金申請表案家問題描述。寫作規則：1.每個事實只說一次，不重複；2.不用連接詞堆疊（然而、亦、且、並）；3.只寫具體事實，不寫「陷入困境」「壓力龐大」等空泛描述；4.未來計畫只寫實際行動，不寫「建立支持網絡」「增強韌性」等抽象語句；5.每段150字以內；6.稱謂依婚姻：已婚用案妻、喪偶用已故案妻或案夫、離婚不提前配偶、未婚無配偶；子女用案子或案女；7.三段前後邏輯一致不可矛盾；8.直接輸出內文不加標題或前言；9.嚴禁自行推論或補充填寫者未提及的行動（例如：填寫者說「未申請資源」就只寫未申請，不可寫成「曾申請但未獲核准」）。';
 
 function v(id){ return document.getElementById(id).value.trim(); }
 
