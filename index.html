@@ -50,6 +50,16 @@ body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;ba
 .spinner{width:15px;height:15px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
 .spinner-dark{width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+.guide-box{background:#eef4ff;border:1px solid #c3d9f7;border-radius:var(--radius-lg);padding:1.2rem 1.4rem;margin-bottom:1rem}
+.guide-title{font-size:13.5px;font-weight:700;color:var(--primary);margin-bottom:.85rem}
+.guide-item{font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:.7rem}
+.guide-item:last-child{margin-bottom:0}
+.guide-sub{font-size:12.5px;color:var(--text2);padding-left:1rem;margin-top:.3rem;line-height:1.7}
+.guide-sub em{color:var(--text);font-style:normal;font-weight:600;background:#fff;padding:1px 7px;border-radius:4px;border:1px solid var(--border)}
+.hl{font-weight:700;color:#185fa5}
+.hl-red{font-weight:700;color:#c0392b}
+.disclaimer{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:.9rem 1.2rem;margin-top:1.5rem;font-size:12px;color:var(--text3);line-height:1.7}
+.disclaimer strong{color:var(--text2)}
 @media(max-width:520px){.qa-row{grid-template-columns:1fr}.qa-q{border-right:none;border-bottom:1px solid var(--border)}}
 </style>
 </head>
@@ -61,7 +71,22 @@ body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;ba
     <p>填入基本案況，AI 自動產出符合協會格式的三段申請描述</p>
   </div>
   <div class="notice">
-    ⚠ 所有資料僅在您的瀏覽器本機處理，<strong>不儲存、不上傳</strong>至任何伺服器。關閉視窗後資料即消失，符合個資保護原則。
+    <div style="display:flex;flex-direction:column;gap:5px;font-size:13px;">
+      <div>⚠ 所有資料<span style="font-weight:700;color:#c0392b;">僅在您的瀏覽器本機處理</span>。</div>
+      <div>⚠ 資料<span style="font-weight:700;color:#c0392b;">不儲存、不上傳</span>至任何伺服器。</div>
+      <div>⚠ 關閉視窗後<span style="font-weight:700;color:#c0392b;">資料即消失</span>，符合個資保護原則。</div>
+    </div>
+  </div>
+
+  <div class="guide-box">
+    <div class="guide-title">📋 填寫說明與注意事項</div>
+    <div class="guide-item">📌 稱謂請使用：<span class="hl">案主、案妻、案子、案女、案母</span> 等社工慣用稱謂，<span class="hl-red">勿填入真實姓名</span>或其他個人識別資訊。</div>
+    <div class="guide-item">📌 「事後處理」欄位請<span class="hl-red">如實填寫</span>，避免 AI 產出與實際不符的描述：
+      <div class="guide-sub">・若完全未申請任何資源 → 請填：<em>未申請任何資源</em></div>
+      <div class="guide-sub">・若有申請但尚未核發 → 請填：<em>已申請○○，尚未核發</em></div>
+      <div class="guide-sub">・若有申請但未通過 → 請填：<em>已申請○○，未通過</em></div>
+    </div>
+    <div class="guide-item">📌 事件經過請盡量具體，包含時間、地點、傷況，產出品質會更準確。</div>
   </div>
 
   <div class="card">
@@ -93,7 +118,7 @@ body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;ba
     <div class="qa-row"><div class="qa-q">事件發生的時間？</div><div class="qa-a"><input type="text" id="q2-date" placeholder="例：114年5月10日、今年三月初"></div></div>
     <div class="qa-row"><div class="qa-q">事件發生的地點？</div><div class="qa-a"><input type="text" id="q2-place" placeholder="例：工地現場、住家、醫院"></div></div>
     <div class="qa-row"><div class="qa-q">發生了什麼事？</div><div class="qa-a"><textarea id="q2-event" placeholder="例：案主搬運鋼筋時被機具壓傷，切斷左手小拇指，造成手掌骨折，緊急送醫手術。"></textarea></div></div>
-    <div class="qa-row"><div class="qa-q">事後如何處理？已申請哪些資源？</div><div class="qa-a"><textarea id="q2-action" placeholder="例：手術順利，需休養3個月，尚未申請任何資源 ／ 已申請職災保險但尚未核發 ／ 未申請任何補助"></textarea></div></div>
+    <div class="qa-row"><div class="qa-q">事後如何處理？（包含資源申請情形）</div><div class="qa-a"><textarea id="q2-action" placeholder="例：手術順利，需休養3個月，尚未申請任何資源 ／ 已申請職災保險但尚未核發 ／ 未申請任何補助"></textarea></div></div>
   </div>
 
   <div class="card">
@@ -112,9 +137,24 @@ body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;ba
     <div class="qa-row"><div class="qa-q">教會可以提供哪些協助？</div><div class="qa-a"><input type="text" id="q3-church" placeholder="例：關懷陪伴、協助就醫交通、申請食物銀行（可不填）"></div></div>
   </div>
 
-  <button class="gen-btn" id="gen-btn" onclick="generate()">
+  <button class="gen-btn" id="gen-btn" onclick="showConfirm()">
     📄 自動產製三段申請描述
   </button>
+
+  <!-- 確認視窗 -->
+  <div id="confirm-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;display:none;align-items:center;justify-content:center;padding:1rem">
+    <div style="background:#fff;border-radius:14px;padding:1.75rem;max-width:420px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,.2)">
+      <div style="font-size:15px;font-weight:600;color:#1a1a18;margin-bottom:1rem">產製前請確認</div>
+      <div style="font-size:13.5px;color:#5f5e5a;line-height:1.9;margin-bottom:1.25rem">
+        ✅ 已使用<strong>案主、案妻、案子</strong>等稱謂，未填入真實姓名或個人資訊<br>
+        ✅ 產出內容<strong>僅供參考</strong>，送出前請<strong>務必逐字核對</strong>，確認符合實際案況
+      </div>
+      <div style="display:flex;gap:10px">
+        <button onclick="closeConfirm()" style="flex:1;padding:10px;border:1px solid #e2e0d8;border-radius:8px;background:#fff;font-size:13.5px;cursor:pointer;font-family:inherit;color:#5f5e5a">返回修改</button>
+        <button onclick="confirmGenerate()" style="flex:2;padding:10px;border:none;border-radius:8px;background:#185fa5;color:#fff;font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit">確認，開始產製</button>
+      </div>
+    </div>
+  </div>
 
   <div id="output-wrap" class="out-wrap" style="display:none">
     <div class="out-block">
@@ -139,6 +179,9 @@ body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;ba
       <div class="out-text" id="out-3"></div>
     </div>
   </div>
+  <div class="disclaimer">
+    <strong>免責聲明：</strong>本工具由 AI 輔助產製文字內容，所有產出結果<strong>僅供參考</strong>。填寫者應自行核實內容之正確性與完整性，並對最終送出之申請書負責。因 AI 產出錯誤、資訊誤填或描述偏差所造成之申請結果，本工具製作者不負任何法律責任。
+  </div>
 </div>
 
 <script>
@@ -146,6 +189,18 @@ const PROXY = 'https://polished-frost-ae7banthropic-proxy.elijahkuo0708.workers.
 const SYS = '你是基督教救助協會（1919）資深社工督導，撰寫急難救助金申請表案家問題描述。寫作規則：1.每個事實只說一次，不重複；2.不用連接詞堆疊（然而、亦、且、並）；3.只寫具體事實，不寫「陷入困境」「壓力龐大」等空泛描述；4.未來計畫只寫實際行動，不寫「建立支持網絡」「增強韌性」等抽象語句；5.每段150字以內；6.稱謂依婚姻：已婚用案妻、喪偶用已故案妻或案夫、離婚不提前配偶、未婚無配偶；子女用案子或案女；7.三段前後邏輯一致不可矛盾；8.直接輸出內文不加標題或前言；9.嚴禁自行推論或補充填寫者未提及的行動（例如：填寫者說「未申請資源」就只寫未申請，不可寫成「曾申請但未獲核准」）。';
 
 function v(id){ return document.getElementById(id).value.trim(); }
+
+function showConfirm(){
+  const overlay = document.getElementById('confirm-overlay');
+  overlay.style.display = 'flex';
+}
+function closeConfirm(){
+  document.getElementById('confirm-overlay').style.display = 'none';
+}
+function confirmGenerate(){
+  document.getElementById('confirm-overlay').style.display = 'none';
+  generate();
+}
 
 async function generate(){
   const btn = document.getElementById('gen-btn');
